@@ -4,9 +4,16 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "nodemon server/index.js"
   },
   "dependencies": {
+    "body-parser": "^1.19.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "nodemon": "^2.0.15",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1",
     "vue": "^3.2.25",
     "vue-router": "^4.0.12",
     "vuex": "^4.0.2"
