@@ -78,8 +78,6 @@ export default {
 
 
         const joinRoom = () => {
-
-
             if (room.hasPassword && password != '') {
                 passError.value = true;
                 passMsg.value = 'Please enter a password';

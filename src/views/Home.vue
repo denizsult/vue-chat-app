@@ -54,13 +54,13 @@ export default {
             this.rooms = data;
         });
 
-        this.$io.on('notification', data => {
+      /*   this.$io.on('notification', data => {
             console.log('notifi', data);
         });
 
         this.$io.on('users', (data) => {
             console.log('users', data);
-        });
+        }); */
     },
 
 

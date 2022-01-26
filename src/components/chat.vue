@@ -91,7 +91,7 @@ export default {
 
     mounted() {
         this.$io.on('message', (data) => {
-            if (data.room === this.room.name) {
+             if (data.room === this.room.name) {
                 this.receivedMessages.push(data);
                 var container = document.getElementById('chatBox');
                 container.scrollTop = container.scrollHeight

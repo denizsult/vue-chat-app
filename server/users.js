@@ -1,33 +1,28 @@
 const users = []
 
-const addUser = (id, name, room) => {
+const addUser = (id, name, room, password) => {
     const existingUser = users.find(user => user.name.trim().toLowerCase() === name.trim().toLowerCase())
 
+
+    if (room.hasPassword && room.password != password) return {
+        type: "password",
+        error: "Passwords do not match"
+    }
     if (existingUser) return {
         type: "name",
         error: "Username has already been taken"
-    }
-
-    if (room.hasPassword) {
-
-    }
-
-    if (!name && !room) return {
-        error: "Username and room are required"
     }
     if (!name) return {
         type: "name",
         error: "Username is required"
     }
-    if (!room) return {
-        error: "Room is required"
-    }
+
 
     const user = {
         id,
         name,
-        room:room.name,
-        room_id:room.id
+        room: room.name,
+        room_id: room.id
     }
     users.push(user)
     return {

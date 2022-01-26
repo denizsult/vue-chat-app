@@ -74,7 +74,7 @@ io.on('connection', (socket) => {
             user,
             error,
             type
-        } = addUser(socket.id, data.userName, data.room.name, room);
+        } = addUser(socket.id, data.userName, room, data.password);
 
         if (error) return callback({
             type,
@@ -82,22 +82,8 @@ io.on('connection', (socket) => {
         })
 
 
-        if (rooms[data.room.id - 1].hasPassword) {
-            if (rooms[data.room.id - 1].password !== data.password) {
-                return callback({
-                    type: "password",
-                    error: "Wrong Password"
-                })
-            }
-
-
-        }
-
 
         socket.join(user.room)
-
-
-
 
 
         socket.in(data.room.name).emit('notification', {
