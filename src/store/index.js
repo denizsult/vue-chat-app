@@ -2,18 +2,48 @@ import {
     createStore
 } from 'vuex'
 
+import {
+    useCookies
+} from "vue3-cookies";
+
+const {
+    cookies
+} = useCookies()
 const store = createStore({
     state: {
-        room: null
+        room: null,
+        userName: null,
+        roomPassword: null,
     },
     getters: {
         getRoom(state) {
-            return state.room
+
+            return state.room || cookies.get('room')
+        },
+
+
+        getUserName(state) {
+            return state.userName || cookies.get('userName')
+        },
+
+        getRoomPassword(state) {
+            return state.roomPassword || cookies.get('roomPassword')
         }
     },
     mutations: {
         setRoom(state, room) {
+            cookies.set('room', room)
+
             state.room = room
+        },
+
+        setUserName(state, userName) {
+            cookies.set('userName', userName)
+            state.userName = userName
+        },
+        setRoomPassword(state, roomPassword) {
+            cookies.set('roomPassword', roomPassword)
+            state.roomPassword = roomPassword
         }
     },
     actions: {},

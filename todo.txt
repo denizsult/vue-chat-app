@@ -1,7 +1,0 @@
-Yapılacaklar 
-
-1- Login 
-2- Register
-3- Sidebar
-4- Profile Edit
-5- Chat Box

@@ -3,7 +3,12 @@
         class="lg:min-h-230 md:min-h-200 sm:min-h-260 bg-gray-100 flex flex-col justify-center py-12 px-6 lg:px-8"
     >
         <header-vue />
-        <component :is="activeComponent" :getRooms="rooms" @changeComponent="newComponent" />
+        <component
+            :is="activeComponent"
+            :getRooms="rooms"
+            @getRooms="setRooms"
+            @changeComponent="newComponent"
+        />
     </div>
     <footer-vue />
 </template>
@@ -28,7 +33,7 @@ export default {
     },
     data() {
         return {
-            activeComponent: 'chatVue',
+            activeComponent: 'roomsVue',
             rooms: []
         }
     },
@@ -36,15 +41,29 @@ export default {
     methods: {
         newComponent(e) {
             this.activeComponent = e;
+        },
+
+        setRooms(e) {
+            this.rooms = e;
         }
 
     },
-    
+
     mounted() {
         this.$io.on('getRooms', (data) => {
             this.rooms = data;
         });
+
+        this.$io.on('notification', data => {
+            console.log('notifi', data);
+        });
+
+        this.$io.on('users', (data) => {
+            console.log('users', data);
+        });
     },
+
+
 
 
 

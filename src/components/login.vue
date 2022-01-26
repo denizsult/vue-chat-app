@@ -11,12 +11,14 @@
                         for="userName"
                     >User Name</label>
                     <input
-                        :class="'shadow block text-sm font-medium w-full  appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'"
+                        :class="'shadow block text-sm font-medium w-full  appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' + (nameError ? ' border-red-500' : '')"
                         id="userName"
                         v-model="userName"
                         type="text"
+                        @focus="nameError = false"
                         placeholder="User Name"
                     />
+                    <p v-if="nameError" class="text-red-500 text-xs italic">{{ nameMsg }}</p>
                 </div>
 
                 <div v-if="room.hasPassword">
@@ -25,13 +27,14 @@
                         for="password"
                     >Room Password</label>
                     <input
-                        :class="'shadow appearance-none border w-full  rounded  py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline' + (isInvalid ? ' border-red-500' : '')"
+                        :class="'shadow appearance-none border w-full  rounded  py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline' + (passError ? ' border-red-500' : '')"
                         id="password"
                         v-model="password"
+                        @focus="passError = false"
                         type="password"
                         placeholder="******************"
                     />
-                    <p v-if="isInvalid" class="text-red-500 text-xs italic">Please enter a password.</p>
+                    <p v-if="passError" class="text-red-500 text-xs italic">{{ passMsg }}</p>
                 </div>
                 <div>
                     <button
@@ -59,40 +62,65 @@
 import { useStore } from 'vuex';
 import { reactive, ref, getCurrentInstance, defineEmits } from 'vue';
 export default {
-    setup() {
+
+    setup(props, context) {
         const store = useStore();
         const { proxy } = getCurrentInstance();
         let room = ref(store.getters.getRoom);
-        let isInvalid = ref(false);
-        let userName = ref('')
+        let passError = ref(false);
+        let nameError = ref(false);
+        let nameMsg = ref('');
+        let passMsg = ref('');
+
+
+        let userName = ref(store.getters.getUserName);
         let password = ref('')
 
 
         const joinRoom = () => {
 
+
             if (room.hasPassword && password != '') {
-                isInvalid.value = true;
+                passError.value = true;
+                passMsg.value = 'Please enter a password';
+
             } else {
-                isInvalid.value = false;
                 proxy.$io.emit('joinRoom', {
                     room: room.value,
                     userName: userName.value,
                     password: password.value
+                }, (data) => {
+                    if (data != 'success') {
+                        if (data.type == 'name') {
+                            nameMsg.value = data.error
+                            nameError.value = true
+                        } else {
+                            passMsg.value = data.error
+                            passError.value = true
+                        }
+                    } else {
+                        store.commit('setRoom', room.value);
+                        store.commit('setUserName', userName.value);
+                        store.commit('setRoomPassword', password.value);
+                        context.emit('changeComponent', 'chatVue');
+                    }
                 });
 
 
             }
 
 
-            defineEmits(['changeComponent', 'chatVue'])
         }
 
         return {
             room,
-            isInvalid,
             userName,
             password,
-            joinRoom
+            joinRoom,
+            nameError,
+            nameMsg,
+            passError,
+            passMsg
         }
     }
 }
