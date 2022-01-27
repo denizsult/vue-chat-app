@@ -104,14 +104,15 @@ export default {
             let userName = this.$cookies.get('userName');
             let roomPassword = this.$cookies.get('roomPassword');
 
-
             this.$io.emit('joinRoom', {
                 room,
                 userName,
                 roomPassword
             }, (data) => {
-                if (data == 'success') {
+                if (data.success) {
                     this.$emit('changeComponent', 'chatVue')
+                }else{
+                    console.log(data)
                 }
             });
         }

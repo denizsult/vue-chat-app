@@ -82,26 +82,26 @@ io.on('connection', (socket) => {
         })
 
 
-
         socket.join(user.room)
 
 
         socket.in(data.room.name).emit('notification', {
             title: 'Someone\'s here',
-            description: `${user.name} just entered the room`
+            description: `${user.name} just entered the room`,
+            isEnter: true
         })
 
         io.in(data.room.name).emit('users', getUsers(data.room.name))
 
         rooms[data.room.id - 1].users.push(user)
 
-
+        delete rooms.password
         socket.broadcast.emit('rooms', rooms)
 
-        return callback('success')
-
-
-
+        return callback({
+            'success': true,
+            room
+        })
 
 
 
@@ -112,7 +112,8 @@ io.on('connection', (socket) => {
         if (user) {
             io.in(user.room).emit('notification', {
                 title: 'Someone just left',
-                description: `${user.name} just left the room`
+                description: `${user.name} just left the room`,
+                isEnter: false
             })
             io.in(user.room).emit('users', getUsers(user.room))
             //delete user
@@ -141,7 +142,11 @@ io.on('connection', (socket) => {
 
     socket.on("disconnect", () => {
         console.log("User disconnected");
+        var userData = getUser(socket.id)
+        rooms.filter(room => room.users.includes(userData) && room.users.splice(room.users.indexOf(userData), 1))
         const user = deleteUser(socket.id)
+       
+       
         if (user) {
             io.in(user.room).emit('notification', {
                 title: 'Someone just left',
@@ -149,6 +154,9 @@ io.on('connection', (socket) => {
             })
             io.in(user.room).emit('users', getUsers(user.room))
         }
+
+        socket.broadcast.emit('rooms', rooms)
+
     })
 
 

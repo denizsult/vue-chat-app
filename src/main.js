@@ -19,13 +19,9 @@ const {
 
 const Vue = createApp(App)
 
-const io = socket('https://vue-chat-app-nodejs.herokuapp.com:5000')
+const io = socket('http://localhost:5000')
 Vue.config.globalProperties.$io = io
 Vue.config.globalProperties.$cookies = cookies
-
-
-
- 
 
 Vue.use(router)
 Vue.use(store)

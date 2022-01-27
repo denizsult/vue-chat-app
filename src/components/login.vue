@@ -88,7 +88,7 @@ export default {
                     userName: userName.value,
                     password: password.value
                 }, (data) => {
-                    if (data != 'success') {
+                    if (!data.success ) {
                         if (data.type == 'name') {
                             nameMsg.value = data.error
                             nameError.value = true
@@ -97,7 +97,8 @@ export default {
                             passError.value = true
                         }
                     } else {
-                        store.commit('setRoom', room.value);
+                    
+                        store.commit('setRoom', data.room);
                         store.commit('setUserName', userName.value);
                         store.commit('setRoomPassword', password.value);
                         context.emit('changeComponent', 'chatVue');

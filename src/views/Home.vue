@@ -1,4 +1,5 @@
 <template>
+    <notification-vue :data="description" v-if="noti" />
     <div
         class="lg:min-h-230 md:min-h-200 sm:min-h-260 bg-gray-100 flex flex-col justify-center py-12 px-6 lg:px-8"
     >
@@ -7,6 +8,7 @@
             :is="activeComponent"
             :getRooms="rooms"
             @getRooms="setRooms"
+            @description="setDescription"
             @changeComponent="newComponent"
         />
     </div>
@@ -21,6 +23,7 @@ import chatVue from '../components/chat.vue';
 import roomsVue from '../components/rooms.vue';
 import footerVue from '../components/footer.vue';
 import headerVue from '../components/header.vue';
+import notificationVue from '../components/notification.vue';
 
 
 export default {
@@ -29,12 +32,16 @@ export default {
         chatVue,
         roomsVue,
         footerVue,
-        headerVue
+        headerVue,
+        notificationVue
     },
+
     data() {
         return {
             activeComponent: 'roomsVue',
-            rooms: []
+            rooms: [],
+            noti: false,
+            description: ''
         }
     },
 
@@ -45,8 +52,20 @@ export default {
 
         setRooms(e) {
             this.rooms = e;
-        }
+        },
 
+        setDescription(e) {
+            this.noti = true
+            this.description = e;
+            setTimeout(() => {
+                this.noti = false
+            }, 3000)
+        },
+
+    },
+
+    unmounted() {
+        this.$io.emit('disconnect');
     },
 
     mounted() {
@@ -54,13 +73,9 @@ export default {
             this.rooms = data;
         });
 
-      /*   this.$io.on('notification', data => {
-            console.log('notifi', data);
-        });
-
         this.$io.on('users', (data) => {
             console.log('users', data);
-        }); */
+        });
     },
 
 

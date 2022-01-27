@@ -21,7 +21,6 @@ const store = createStore({
             return state.room || cookies.get('room')
         },
 
-
         getUserName(state) {
             return state.userName || cookies.get('userName')
         },
