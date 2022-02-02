@@ -43,9 +43,22 @@ const store = createStore({
         setRoomPassword(state, roomPassword) {
             cookies.set('roomPassword', roomPassword)
             state.roomPassword = roomPassword
-        }
+        },
+
+
     },
-    actions: {},
+    actions: {
+        logOut({}, payload) {
+            cookies.remove('room')
+            cookies.remove('userName')
+            cookies.remove('roomPassword')
+            this.commit('setRoom', null)
+            this.commit('setUserName', '')
+            this.commit('setRoomPassword', '')
+        
+        }
+
+    },
 
 })
 

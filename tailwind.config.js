@@ -21,11 +21,23 @@ module.exports = {
       // => @media (min-width: 1536px) { ... }
     },
     extend: {
-   
       animation: {
         fade: 'fadeOut 3s ease-in-out',
+        spin: 'spin 1.5s linear infinite',
       },
+
+
       keyframes: theme => ({
+
+        spin: {
+          '0%': {
+            transform: 'rotate(0deg)',
+          },
+          '100%': {
+            transform: 'rotate(360deg)',
+          },
+        },
+
         fadeOut: {
           '0%': {
             backgroundColor: theme('colors.red.300'),
@@ -39,10 +51,7 @@ module.exports = {
         center: true
       },
       colors: {
-        'windi-blue': '#00a0e9',
-        'windi-green': '#00e600',
-        'windi-red': '#e60000',
-        'windi-yellow': '#e6e600'
+        'mainColor': '#f7fafc'
       }
 
     }

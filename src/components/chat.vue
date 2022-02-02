@@ -38,7 +38,7 @@
             <form @submit.prevent="sendMessage">
                 <input
                     type="text"
-                    class="w-full my-8 py-2 px-4 border border-transparent rounded-md shadow-sm focus:outline-blue-300 focus:shadow-outline"
+                    :class="'w-full my-8 py-2 px-4 border border-transparent rounded-md shadow-sm focus:outline-blue-300 focus:shadow-outline ' + (msgError ? ' border-red-500' : '')"
                     placeholder="Please insert a message"
                     v-model="message"
                 />
@@ -63,52 +63,54 @@ export default {
 
     data() {
         return {
-            myMessages: [],
             receivedMessages: [],
             room: this.$store.getters.getRoom,
             message: '',
-
+            msgError: false,
 
         }
     },
 
-
     mounted() {
         this.$io.on('message', (data) => {
-            if (data.room === this.room.name) {
-                this.receivedMessages.push(data);
-                var container = document.getElementById('chatBox');
-                container.scrollTop = container.scrollHeight
-            };
+            this.receivedMessages.push(data);
+            var container = document.getElementById('chatBox');
+            container.scrollTop = container.scrollHeight
+
         })
+
         this.$io.on('notification', (data) => {
             this.$emit('description', data);
-            console.log('notifi', data);
+            this.getRoom()
 
         });
 
-
-        console.log('room', this.room);
-
-
-
     },
+
     methods: {
         sendMessage() {
-            this.$io.emit('sendMessage', this.message)
-            this.message = ''
+            if (this.message != '') {
+                this.$io.emit('sendMessage', this.message)
+                this.message = ''
+            } else {
+                this.msgError = true;
+            }
 
         },
 
         logOut() {
+            this.$store.dispatch('logOut')
             this.$io.emit('leaveRoom')
-            this.$cookies.remove('userName')
-            this.$cookies.remove('room')
-            this.$cookies.remove('roomPassword')
             this.$emit('changeComponent', 'roomsVue')
+        },
+
+        getRoom() {
+            this.$io.emit('getRoom', this.room.id, (data) => {
+                this.room = data.room
+            })
+
         }
     }
-
 
 }
 </script>

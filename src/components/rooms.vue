@@ -3,7 +3,11 @@
         <div
             class="bg-white py-10 overflow-auto px-6 shadow rounded-lg sm:px-10 h-100 scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
         >
-            <table class="min-w-full divide-y divide-gray-200">
+            <div v-if="rooms.length === 0" class="w-full h-full flex items-center justify-center">
+                <div class="animate-spin rounded-full h-20 w-20 border-b-2 border-blue-600"></div>
+            </div>
+
+            <table v-if="rooms.length > 0" class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
                         <th
@@ -36,7 +40,7 @@
                 </thead>
 
                 <tbody class="bg-white divide-y divide-gray-200">
-                    <tr v-for="room in getRooms" :key="room">
+                    <tr v-for="room in rooms" :key="room">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
                                 <div class="ml-4">
@@ -63,7 +67,7 @@
                                 <div class="ml-4">
                                     <div
                                         class="text-sm font-medium text-green-800"
-                                    >{{ room.users.length }}</div>
+                                    >{{ room.users }}</div>
                                 </div>
                             </div>
                         </td>
@@ -86,43 +90,30 @@
 
 export default {
 
-    props: {
-        getRooms: {
-            type: Array,
-            required: true
+    data() {
+        return {
+            rooms: []
         }
     },
-
+   
     mounted() {
-        this.$io.on('rooms', (data) => {
-            this.$emit('getRooms', data);
-        });
-
-
-        if (this.$cookies.get('room') && this.$cookies.get('userName')) {
-            let room = this.$cookies.get('room');
-            let userName = this.$cookies.get('userName');
-            let roomPassword = this.$cookies.get('roomPassword');
-
-            this.$io.emit('joinRoom', {
-                room,
-                userName,
-                roomPassword
-            }, (data) => {
-                if (data.success) {
-                    this.$emit('changeComponent', 'chatVue')
-                }else{
-                    console.log(data)
-                }
-            });
-        }
-
+        this.getRooms();
     },
 
     methods: {
         joinRoom(room) {
             this.$store.commit('setRoom', room);
             this.$emit('changeComponent', 'loginVue')
+        },
+
+        async getRooms() {
+            await this.$io.emit('getRooms', (res) => {
+                this.rooms = res.data;
+            });
+
+            await this.$io.on('rooms', (res) => {
+                this.rooms = res;
+            });
         }
     },
 
@@ -130,7 +121,5 @@ export default {
 }
 
 
-
-
-
 </script>
+ 

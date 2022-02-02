@@ -1,10 +1,10 @@
 <template>
-    <footer class="bg-gradient-to-b from-gray-100 to-gray-300">
+    <footer class="static lg:fixed bottom-0 w-full min-h-15 ">
         <div class="lg:flex">
             <div class="flex-1 text-center text-gray-600 mt-2">
                 <p class="text-sm">
                     © 2020 Vue.js Chat App with Tailwind CSS |
-                    <a>Github</a>
+                    <a href="https://github.com/denizsult/vue-chat-app" target="_blank">Github</a>
                 </p>
             </div>
 

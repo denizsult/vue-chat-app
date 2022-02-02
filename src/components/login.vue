@@ -44,7 +44,7 @@
 
                     <a
                         @click="$emit('changeComponent', 'roomsVue')"
-                        class="flex justify-center py-5 px-4 text-sm font-medium text-blue cursor-pointer"
+                        class="flex justify-center py-5 px-4 mt-10 text-sm font-medium text-blue cursor-pointer"
                     >
                         <img src alt /> Back to Rooms
                     </a>
@@ -60,7 +60,7 @@
 
 <script>
 import { useStore } from 'vuex';
-import { reactive, ref, getCurrentInstance, defineEmits } from 'vue';
+import { ref, getCurrentInstance } from 'vue';
 export default {
 
     setup(props, context) {
@@ -71,42 +71,35 @@ export default {
         let nameError = ref(false);
         let nameMsg = ref('');
         let passMsg = ref('');
-
-
         let userName = ref(store.getters.getUserName);
         let password = ref('')
 
 
         const joinRoom = () => {
-            if (room.hasPassword && password != '') {
-                passError.value = true;
-                passMsg.value = 'Please enter a password';
 
-            } else {
-                proxy.$io.emit('joinRoom', {
-                    room: room.value,
-                    userName: userName.value,
-                    password: password.value
-                }, (data) => {
-                    if (!data.success ) {
-                        if (data.type == 'name') {
-                            nameMsg.value = data.error
-                            nameError.value = true
-                        } else {
-                            passMsg.value = data.error
-                            passError.value = true
-                        }
+            proxy.$io.emit('joinRoom', {
+                room: room.value,
+                userName: userName.value,
+                password: password.value
+            }, (data) => {
+               
+               if (!data.success) {
+                    if (data.type == 'name') {
+                        nameMsg.value = data.error
+                        nameError.value = true
                     } else {
-                    
-                        store.commit('setRoom', data.room);
-                        store.commit('setUserName', userName.value);
-                        store.commit('setRoomPassword', password.value);
-                        context.emit('changeComponent', 'chatVue');
+                        passMsg.value = data.error
+                        passError.value = true
                     }
-                });
+                } else {
+                    store.commit('setRoom', data.room);
+                    store.commit('setUserName', userName.value);
+                    store.commit('setRoomPassword', password.value);
+                    context.emit('changeComponent', 'chatVue');
+                }
+            });
 
 
-            }
 
 
         }

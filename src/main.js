@@ -16,7 +16,6 @@ const {
 
 
 
-
 const Vue = createApp(App)
 
 const io = socket('https://vue-chat-app-nodejs.herokuapp.com/')
