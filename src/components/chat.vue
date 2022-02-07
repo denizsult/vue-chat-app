@@ -72,11 +72,8 @@ export default {
     },
 
     mounted() {
-        this.$io.on('message', (data) => {
-            this.receivedMessages.push(data);
-            var container = document.getElementById('chatBox');
-            container.scrollTop = container.scrollHeight
-
+        this.$io.on('message', async (data) => {
+            this.receivedMessages.push(await data);
         })
 
         this.$io.on('notification', (data) => {
@@ -92,6 +89,12 @@ export default {
             if (this.message != '') {
                 this.$io.emit('sendMessage', this.message)
                 this.message = ''
+                setTimeout(() => {
+                    var container = document.getElementById('chatBox');
+                    container.scrollTop = container.scrollHeight;
+                }, 100)
+
+
             } else {
                 this.msgError = true;
             }
