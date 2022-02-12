@@ -16,7 +16,7 @@
                         v-model="userName"
                         type="text"
                         @focus="nameError = false"
-                        placeholder="User Name"
+                        placeholder="Username"
                     />
                     <p v-if="nameError" class="text-red-500 text-xs italic">{{ nameMsg }}</p>
                 </div>
