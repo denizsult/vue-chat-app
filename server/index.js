@@ -12,16 +12,16 @@ const rooms = [
 
     {
         id: 1,
-        name: 'room1',
-        description: 'room1 description',
+        name: 'Genel',
+        description: 'Genel Sohbet Odası',
         users: [],
         status: 'open',
         hasPassword: false,
     },
     {
         id: 2,
-        name: 'room2',
-        description: 'room2 description',
+        name: 'Vue.js',
+        description: 'Vue.Js Sohbet Odası',
         users: [],
         status: 'open',
         hasPassword: true,
@@ -30,8 +30,8 @@ const rooms = [
     },
     {
         id: 3,
-        name: 'room3',
-        description: 'room3 description',
+        name: 'React.js',
+        description: 'React.Js Sohbet Odası',
         users: [],
         status: 'open',
         hasPassword: false,
@@ -39,8 +39,8 @@ const rooms = [
     },
     {
         id: 4,
-        name: 'room4',
-        description: 'room4 description',
+        name: 'Node.js',
+        description: 'Node.Js Sohbet Odası',
         users: [],
         status: 'closed',
         hasPassword: false,
