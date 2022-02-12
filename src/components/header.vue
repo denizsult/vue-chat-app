@@ -3,7 +3,7 @@
         <div class="flex">
             <img
                 class="mx-auto h-12 w-auto"
-                src="https://w7.pngwing.com/pngs/498/458/png-transparent-vue-js-web-development-javascript-library-front-and-back-ends-vue-js-angle-text-logo.png"
+                src="../assets/vue.png"
                 alt="Workflow"
             />
             <img
