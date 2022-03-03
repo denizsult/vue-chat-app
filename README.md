@@ -1,5 +1,5 @@
 
-# Vue.js odası şifre 123 :)
+# Password for Vue.js Room: 123 :)
 
 # Vue Basic Chat Application 
 Vue 3 + Vite + Tailwind + Socket.io <br>
